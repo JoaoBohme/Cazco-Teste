@@ -14,16 +14,22 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::namespace('App')->group(function() {
-    Route::get('/', 'Http\Controllers\Site\HomeController');
-    
-    Route::get('admin/login', 'Http\Controllers\Site\Admin\LoginController@index');
-    Route::get('admin/forgot-password', 'Http\Controllers\Site\Admin\ForgotPasswordController@index');
-    Route::get('admin/password-recovery', 'Http\Controllers\Site\Admin\PasswordRecoveryController@index');
-    Route::get('admin/users', 'Http\Controllers\Site\Admin\UsersController@index');
-    Route::get('admin/create', 'Http\Controllers\Site\Admin\CreateController@index');
-    Route::get('admin/edit', 'Http\Controllers\Site\Admin\EditController@index');
 
-    Route::get('user/login', 'Http\Controllers\Site\User\LoginController@index');
-    Route::get('user/forgot-password', 'Http\Controllers\Site\User\ForgotPasswordController@index');
-    Route::get('user/password-recovery', 'Http\Controllers\Site\User\PasswordRecoveryController@index');
+    Route::redirect('/', 'user/login');
+    
+    Route::prefix('admin')->group(function () {
+        Route::get('/login', 'Http\Controllers\Admin\AdminController@login');
+        Route::get('/forgot-password', 'Http\Controllers\Admin\AdminController@forgotPassword');
+        Route::get('/password-recovery', 'Http\Controllers\Admin\AdminController@passwordRecovery');
+        Route::get('/users', 'Http\Controllers\Admin\AdminController@users');
+        Route::get('/create', 'Http\Controllers\Admin\AdminController@createUser');
+        Route::get('/edit', 'Http\Controllers\Admin\AdminController@editUser');
+    });
+
+    Route::prefix('user')->group(function () {
+        Route::get('/login', 'Http\Controllers\User\UserController@login');
+        Route::get('/forgot-password', 'Http\Controllers\User\UserController@forgotPassword');
+        Route::get('/password-recovery', 'Http\Controllers\User\UserController@passwordRecovery');
+    });
+
 });

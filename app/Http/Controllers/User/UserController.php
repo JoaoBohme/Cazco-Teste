@@ -1,20 +1,25 @@
 <?php
 
-namespace App\Http\Controllers\Site\Admin;
+namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class CreateController extends Controller
+class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function forgotPassword()
     {
-        return view('site.admin.create');
+        return view('site.user.forgotPassword');
+    }
+
+    public function login()
+    {
+        return view('site.user.login');
+    }
+
+    public function passwordRecovery()
+    {
+        return view('site.user.passwordRecovery');
     }
 
     /**
