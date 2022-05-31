@@ -14,7 +14,7 @@ class ForgotPasswordController extends Controller
      */
     public function index()
     {
-        //
+        return view('site.user.forgotPassword');
     }
 
     /**

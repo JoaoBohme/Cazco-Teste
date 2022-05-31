@@ -23,7 +23,7 @@ Route::namespace('App')->group(function() {
     Route::get('admin/create', 'Http\Controllers\Site\Admin\CreateController@index');
     Route::get('admin/edit', 'Http\Controllers\Site\Admin\EditController@index');
 
-    Route::get('user/login', 'Http\Controllers\Site\UserController@index');
-    Route::get('user/forgot-password', 'Http\Controllers\Site\UserController@index');
-    Route::get('user/password-recovery', 'Http\Controllers\Site\UserController@index');
+    Route::get('user/login', 'Http\Controllers\Site\User\LoginController@index');
+    Route::get('user/forgot-password', 'Http\Controllers\Site\User\ForgotPasswordController@index');
+    Route::get('user/password-recovery', 'Http\Controllers\Site\User\PasswordRecoveryController@index');
 });
