@@ -1,3 +1,7 @@
+@extends('layouts.site')
+
+@section('content')
+
 <!doctype html>
 <html lang="pt-br">
   <head>
@@ -29,8 +33,7 @@
       <button type="button" class="btn btn-primary">Enviar</button>
       </div>
     </div>
-
-
-
   </body>
 </html>
+
+@endsection

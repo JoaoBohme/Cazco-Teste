@@ -1,3 +1,7 @@
+@extends('layouts.site')
+
+@section('content')
+
 <!doctype html>
 <html lang="pt-br">
   <head>
@@ -25,3 +29,5 @@
 
   </body>
 </html>
+
+@endsection
