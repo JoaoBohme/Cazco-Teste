@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Users;
 
 class UserController extends Controller
 {
@@ -21,7 +22,21 @@ class UserController extends Controller
     {
         return view('site.user.passwordRecovery');
     }
+    
+    public function indexReports()
+    {
+        return view('site.user.reports');
+    }
 
+    public function indexCreateReports()
+    {
+        return view('site.user.createReport');
+    }
+
+    public function indexEditReports()
+    {
+        return view('site.user.editReport');
+    }
     /**
      * Show the form for creating a new resource.
      *

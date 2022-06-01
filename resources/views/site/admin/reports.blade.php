@@ -7,23 +7,20 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Lista de usuários</title>
+    <title>Lista de Relatórios</title>
     
   </head>
   <body>
     <div class="card">
       <div class="card-body">
-      <div class="row">
-        <div class="col-6"><h3>Usuários</h3></div>
-        <div class="col"><a href="edit" type="button" class="btn btn-primary">Criar Usuário</a></div>
-      </div>
+        <div class="col"><h3>Relatórios</h3></div>
         <table class="table table-striped table-hover" >
           <thead>
             <tr>
               <th scope="col">Id</th>
-              <th scope="col">Nome</th>
-              <th scope="col">Email</th>
-              <th scope="col">Ações</th>
+              <th scope="col">Dia</th>
+              <th scope="col">Id Usuário</th>
+              <th scope="col">Descrição</th>
             </tr>
           </thead>
           <tbody>
@@ -31,11 +28,7 @@
               <th scope="row">1</th>
               <td>Mark</td>
               <td>Mark@gmail.com</td>
-              <td>
-                <a href="reports" type="button" class="btn btn-success">Relatórios</a>
-                <a href="edit" type="button" class="btn btn-warning">Editar</a>
-                <a href="#" type="button" class="btn btn-danger">Excluir</a>
-              </td>
+              <td></td>
             </tr>
           </tbody>
         </table>

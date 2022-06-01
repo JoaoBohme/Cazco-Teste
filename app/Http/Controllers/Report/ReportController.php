@@ -1,56 +1,23 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Report;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Admin;
+use App\Models\Report;
 
-class AdminController extends Controller
+class ReportController extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function indexUsers()
     {
-        //
-    }
+        $reports = Report::all();
 
-    public function login()
-    {
-        return view('site.admin.login');
-    }
-
-    public function forgotPassword()
-    {
-        return view('site.admin.forgotPassword');
-    }
-
-    public function passwordRecovery()
-    {
-        return view('site.admin.passwordRecovery');
-    }
-
-    public function users()
-    {
-        return view('site.admin.users');
-    }
-
-    public function editUser()
-    {
-        return view("site.admin.edit");
-    }
-
-    public function createUser()
-    {
-        return view('site.admin.create');
-    }
-
-    public function indexReports()
-    {
-        return view('site.admin.reports');
+        return view('site.user.reports',['reports' => $reports]);
     }
 
     /**
@@ -58,6 +25,10 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function create()
+    {
+        //
+    }
 
     /**
      * Store a newly created resource in storage.

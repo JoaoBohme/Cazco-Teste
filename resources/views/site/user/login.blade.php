@@ -30,7 +30,7 @@
     </div>
 
     <div style="text-align: center;">
-      <a href="#" type="button" class="btn btn-primary">Entrar</a>
+      <a href="reports" type="button" class="btn btn-primary">Entrar</a>
     </div>
 
     <div style="text-align: center; padding-top: 10px;">
