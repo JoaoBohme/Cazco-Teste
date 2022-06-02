@@ -15,9 +15,9 @@
       <div class="card-body">
       <div class="row">
         <div class="col-6"><h3>Usuários</h3></div>
-        <div class="col"><a href="edit" type="button" class="btn btn-primary">Criar Usuário</a></div>
+        <div class="col"><a href="create" type="button" class="btn btn-primary">Criar Usuário</a></div>
       </div>
-        <table class="table table-striped table-hover" >
+        <table class="table table-striped table-hover">
           <thead>
             <tr>
               <th scope="col">Id</th>
@@ -34,8 +34,15 @@
               <th>{{$users->email}}</th>
               <td>
                 <a href="reports/{{$users->id}}" type="button" class="btn btn-success">Relatórios</a>
+
                 <a href="edit/{{$users->id}}" type="button" class="btn btn-warning">Editar</a>
-                <a href="#" type="button" class="btn btn-danger">Excluir</a>
+              </td>
+              <td>
+                <form action="/admin/users/{{$users->id}}" method="POST">
+                  @csrf
+                  @method('DELETE')
+                  <button type="submit" class="btn btn-danger">Excluir</button>
+                </form>
               </td>
             </tr>
             @endforeach

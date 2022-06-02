@@ -28,6 +28,12 @@ class UserController extends Controller
         return view('site.user.reports');
     }
 
+    public function indexCreateReports()
+    {
+        return view('site.user.createReport');
+    }
+
+    
 
     /**
      * Show the form for creating a new resource.

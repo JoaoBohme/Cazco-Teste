@@ -26,10 +26,13 @@ Route::namespace('App')->group(function() {
         Route::get('/password-recovery', 'Http\Controllers\Admin\AdminController@passwordRecovery');
         
         Route::get('/users', 'Http\Controllers\Admin\AdminController@users');
+        Route::delete('/users/{id}', 'Http\Controllers\Admin\AdminController@destroyUser');
         
         Route::get('/create', 'Http\Controllers\Admin\AdminController@createUser');
+        Route::post('/create', 'Http\Controllers\Admin\AdminController@storeUser');
         
         Route::get('/edit/{id}', 'Http\Controllers\Admin\AdminController@editUser');
+        Route::put('/edit/{id}', 'Http\Controllers\Admin\AdminController@updateUser');
         
         Route::get('/reports/{id}', 'Http\Controllers\Admin\AdminController@indexReports');
     });
@@ -42,7 +45,7 @@ Route::namespace('App')->group(function() {
         
         Route::get('/password-recovery', 'Http\Controllers\User\UserController@passwordRecovery');
         
-        Route::get('/create-report', 'Http\Controllers\User\UserController@indexCreateReports');
+        Route::get('/create-report/{id}', 'Http\Controllers\User\UserController@indexCreateReports');
         
         Route::get('/edit-report/{id}', 'Http\Controllers\Report\ReportController@show');
 

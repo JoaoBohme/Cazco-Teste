@@ -80,6 +80,19 @@ class AdminController extends Controller
     {
         //
     }
+     
+    public function storeUser(Request $request)
+    {
+        $users = new Users;
+
+        $users->name = $request->name;
+        $users->email = $request->email;
+        $users->password = $request->password;
+
+        $users->save();
+
+        return redirect('/admin/users'); 
+    }
 
     /**
      * Display the specified resource.
@@ -115,6 +128,14 @@ class AdminController extends Controller
         //
     }
 
+    public function updateUser(Request $request, $id)
+    {
+        Users::findOrFail($request->id)
+            ->update($request->all());
+
+        return redirect('/admin/users')->with('msg', 'Usuário editado com sucesso!');    
+    }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -124,5 +145,16 @@ class AdminController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function destroyUser($id)
+    {
+        $reports = DB::table('reports')
+                ->where('user_id', '=', $id)
+                ->delete();
+
+        Users::findOrFail($id)->delete();
+
+        return redirect('/admin/users')->with('msg', 'Usuário excluído com sucesso!');
     }
 }

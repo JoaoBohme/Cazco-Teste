@@ -13,10 +13,12 @@
     <div class="card">
       <div class="card-body">
         <h3>Criar relatório</h3>
+        <form action="/user/create-report/{{$users->id}}" method="POST">
+          @csrf
         <div class="input-group mb-3">
-          <textarea class="form-control" rows="3" placeholder="Faça sua descrição aqui."></textarea>
+          <textarea id="description" name="description" class="form-control" rows="3" placeholder="Faça sua descrição aqui."></textarea>
       </div>
-      <button type="button" class="btn btn-primary">Enviar</button>
+      <button type="submit" class="btn btn-primary">Enviar</button>
       </div>
     </div>
   </body>

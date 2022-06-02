@@ -14,14 +14,17 @@
   <body>
     <div class="card">
       <div class="card-body">
-        <h3>Editar usuário</h3>
+        <h3>Editar {{$users->name}}</h3>
+        <form action="/admin/edit/{{$users->id}}" method="POST">
+          @csrf
+          @method('PUT')
         <div class="input-group mb-3">
-          <input type="text" class="form-control" value="{{$users->name}}" placeholder="Nome" aria-label="Username" aria-describedby="basic-addon1">
+          <input id="name" name="name" type="text" class="form-control" value="{{$users->name}}" placeholder="Nome" aria-label="Username" aria-describedby="basic-addon1">
       </div>
         <div class="input-group mb-3">
-            <input type="text" class="form-control" value="{{$users->email}}" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1">
+            <input id="email" name="email" type="text" class="form-control" value="{{$users->email}}" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1">
         </div>
-        <button type="button" class="btn btn-primary">Salvar</button>
+        <button type="submit" class="btn btn-primary">Salvar</button>
       </div>
     </div>
 
