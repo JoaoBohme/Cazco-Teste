@@ -49,8 +49,14 @@ class ReportController extends Controller
      */
     public function show($id)
     {
-        //
+        {
+            $reports = Report::findOrFail($id);
+    
+            return view('site.user.editReport', ['report' => $reports]);
+        }
     }
+
+
 
     /**
      * Show the form for editing the specified resource.

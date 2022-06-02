@@ -1,5 +1,7 @@
 @extends('layouts.site')
 
+@section('Title')
+
 @section('content')
 
 <!doctype html>
@@ -24,12 +26,14 @@
             </tr>
           </thead>
           <tbody>
+            @foreach ($reports as $reports)
             <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Mark@gmail.com</td>
-              <td></td>
+              <td>{{$reports->id}}</td>
+              <td>{{$reports->day}}</td>
+              <td>{{$reports->user_id}}</td>
+              <td>{{$reports->description}}</td>
             </tr>
+            @endforeach
           </tbody>
         </table>
       </div>

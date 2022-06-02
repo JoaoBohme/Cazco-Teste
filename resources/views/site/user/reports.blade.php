@@ -35,7 +35,7 @@
                 <td>{{$report->user_id}}</td>
                 <td>{{$report->description}}</td>
                 <td>
-                  <a href="edit-report" type="button" class="btn btn-warning">Editar</a>
+                  <a href="edit-report/{{$report->id}}" type="button" class="btn btn-warning">Editar</a>
                 </td>
               @endforeach
             </tr>

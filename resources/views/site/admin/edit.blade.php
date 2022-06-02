@@ -1,5 +1,7 @@
 @extends('layouts.site')
 
+@section('Title', $users->name)
+
 @section('content')
 
 <!doctype html>
@@ -14,10 +16,10 @@
       <div class="card-body">
         <h3>Editar usuário</h3>
         <div class="input-group mb-3">
-          <input type="text" class="form-control" placeholder="Nome" aria-label="Username" aria-describedby="basic-addon1">
+          <input type="text" class="form-control" value="{{$users->name}}" placeholder="Nome" aria-label="Username" aria-describedby="basic-addon1">
       </div>
         <div class="input-group mb-3">
-            <input type="text" class="form-control" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1">
+            <input type="text" class="form-control" value="{{$users->email}}" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1">
         </div>
         <button type="button" class="btn btn-primary">Salvar</button>
       </div>

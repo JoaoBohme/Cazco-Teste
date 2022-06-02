@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Admin;
+use App\Models\Users;
+use App\Models\Report;
 
 class AdminController extends Controller
 {
@@ -35,12 +38,16 @@ class AdminController extends Controller
 
     public function users()
     {
-        return view('site.admin.users');
+        $users = Users::all();
+
+        return view('site.admin.users',['users' => $users]);
     }
 
-    public function editUser()
+    public function editUser($id)
     {
-        return view("site.admin.edit");
+        $users = Users::findOrFail($id);
+
+        return view("site.admin.edit", ['users' => $users]);
     }
 
     public function createUser()
@@ -48,9 +55,13 @@ class AdminController extends Controller
         return view('site.admin.create');
     }
 
-    public function indexReports()
+    public function indexReports($id)
     {
-        return view('site.admin.reports');
+        $reports = DB::table('reports')
+                ->where('user_id', '=', $id)
+                ->get();
+        
+        return view("site.admin.reports", ['reports' => $reports]);
     }
 
     /**

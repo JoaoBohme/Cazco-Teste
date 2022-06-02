@@ -27,16 +27,18 @@
             </tr>
           </thead>
           <tbody>
+            @foreach($users as $users)
             <tr>
-              <th scope="row">1</th>
-              <td>Mark</td>
-              <td>Mark@gmail.com</td>
+              <th>{{$users->id}}</th>
+              <th>{{$users->name}}</th>
+              <th>{{$users->email}}</th>
               <td>
-                <a href="reports" type="button" class="btn btn-success">Relatórios</a>
-                <a href="edit" type="button" class="btn btn-warning">Editar</a>
+                <a href="reports/{{$users->id}}" type="button" class="btn btn-success">Relatórios</a>
+                <a href="edit/{{$users->id}}" type="button" class="btn btn-warning">Editar</a>
                 <a href="#" type="button" class="btn btn-danger">Excluir</a>
               </td>
             </tr>
+            @endforeach
           </tbody>
         </table>
       </div>
