@@ -20,7 +20,7 @@
         <table class="table table-striped table-hover">
           <thead>
             <tr>
-              <th scope="col">Id</th>
+              <th scope="col">{{$LoggedAdminInfo->email}}</th>
               <th scope="col">Nome</th>
               <th scope="col">Email</th>
               <th scope="col">Ações</th>

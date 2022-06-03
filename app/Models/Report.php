@@ -9,5 +9,7 @@ class Report extends Model
 {
     protected $table = "reports";
 
+    protected $guarded = [];
+
     use HasFactory;
 }

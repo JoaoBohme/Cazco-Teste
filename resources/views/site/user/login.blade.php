@@ -19,19 +19,28 @@
       <h3>Entrar</h3>
     </div>
 
+    @error('msg')
+    <div class="alert alert-danger"> {{ $message }} </div>
+    @enderror
+        
+    
     </br>
 
-    <div class="input-group mb-3">
-      <input type="text" class="form-control" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1">
-    </div>
-    <div class="input-group mb-3">
-      <input type="password" class="form-control" placeholder="Senha" aria-label="Password"
-        aria-describedby="basic-addon1">
-    </div>
-
-    <div style="text-align: center;">
-      <a href="reports" type="button" class="btn btn-primary">Entrar</a>
-    </div>
+    <form action="/user/login" method="POST">
+      @csrf
+      <div class="form-group">
+        <input type="text" id="email" name="email" class="form-control" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1">
+        @error('email')<div class="text-danger">{{ $message }} </div>@enderror
+      </div>
+      <div class="input-group mb-3">
+        <input type="password" id="password" name="password" class="form-control" placeholder="Senha" aria-label="Password">
+  
+        @error('password')<div class="text-danger">{{ $message }} </div>@enderror
+      </div>
+  
+      <div style="text-align: center;">
+        <button type="submit" class="btn btn-primary">Entrar</button>
+      </div>
 
     <div style="text-align: center; padding-top: 10px;">
       <a href="forgot-password">Esqueci minha senha</a>

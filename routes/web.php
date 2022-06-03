@@ -20,12 +20,14 @@ Route::namespace('App')->group(function() {
     Route::prefix('admin')->group(function () {
         
         Route::get('/login', 'Http\Controllers\Admin\AdminController@login');
+        Route::post('/login', 'Http\Controllers\Admin\AdminController@authenticate');
         
         Route::get('/forgot-password', 'Http\Controllers\Admin\AdminController@forgotPassword');
         
         Route::get('/password-recovery', 'Http\Controllers\Admin\AdminController@passwordRecovery');
         
         Route::get('/users', 'Http\Controllers\Admin\AdminController@users');
+        //Route::get('/users', 'Http\Controllers\Admin\AdminController@profile');
         Route::delete('/users/{id}', 'Http\Controllers\Admin\AdminController@destroyUser');
         
         Route::get('/create', 'Http\Controllers\Admin\AdminController@createUser');
@@ -40,6 +42,7 @@ Route::namespace('App')->group(function() {
     Route::prefix('user')->group(function () {
         
         Route::get('/login', 'Http\Controllers\User\UserController@login');
+        Route::post('/login', 'Http\Controllers\User\UserController@authenticate');
         
         Route::get('/forgot-password', 'Http\Controllers\User\UserController@forgotPassword');
         

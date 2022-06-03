@@ -2,12 +2,48 @@
 
 namespace App\Http\Controllers\User;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Users;
 
 class UserController extends Controller
 {
+    public function authenticate(Request $request)
+    {
+        $request->validate([
+            'email'=>'required|email',
+            'password'=>'required|min:5|max:12'
+        ]);
+
+        $users = Users::where('email','=', $request->email)->first();
+        if($users){
+            if(($request->password == $users->password)){
+
+                $request->session()->put('LoggedUsers', $users->id);
+
+                return redirect('/user/reports');
+            }
+            else{
+                return back()->withErrors(['msg'=>"Senha inválida!"]);
+            }
+        }
+        else{
+            return back()->withErrors(['msg'=>"Email não cadastrado!"]);
+        }
+    }
+
+    public function logout(Request $request){
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/user/login');
+    }
+
     public function forgotPassword()
     {
         return view('site.user.forgotPassword');
@@ -33,7 +69,7 @@ class UserController extends Controller
         return view('site.user.createReport');
     }
 
-    
+
 
     /**
      * Show the form for creating a new resource.

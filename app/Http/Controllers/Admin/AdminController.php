@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -16,6 +18,48 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function authenticate(Request $request)
+    {
+        $request->validate([
+            'email'=>'required|email',
+            'password'=>'required|min:5|max:12'
+        ]);
+
+        $admin = Admin::where('email','=', $request->email)->first();
+        if($admin){
+            if(($request->password == $admin->password)){
+
+                $request->session()->put('LoggedAdmin', $admin->id);
+
+                return redirect('/admin/users');
+            }
+            else{
+                return back()->withErrors(['msg'=>"Senha inválida!"]);
+            }
+        }
+        else{
+            return back()->withErrors(['msg'=>"Email não cadastrado!"]);
+        }
+    }
+
+    function profile(){
+        if(session()->has('LoggedAdmin')){
+            $admin = Admin::where('id', '=', session('LoggedAdmin'))->first();
+            $data = [
+                'LoggedUserInfo'=>$admin
+            ];
+        }
+        return view("site.admin.users", $data);
+    }
+
+    public function logout(){
+        if(session()->has('LoggedAdmin')){
+            session()->pull('LoggedAdmin');
+            return redirect('/admin/login');
+        }
+    }
+
     public function index()
     {
         //
@@ -38,9 +82,16 @@ class AdminController extends Controller
 
     public function users()
     {
+        if(session()->has('LoggedAdmin')){
+            $admin = Admin::where('id', '=', session('LoggedAdmin'))->first();
+            $data = [
+                'LoggedAdminInfo'=>$admin
+            ];
+        }
+
         $users = Users::all();
 
-        return view('site.admin.users',['users' => $users]);
+        return view('site.admin.users',['users' => $users], $data);
     }
 
     public function editUser($id)
@@ -83,15 +134,26 @@ class AdminController extends Controller
      
     public function storeUser(Request $request)
     {
-        $users = new Users;
 
+        $request->validate([
+            'name'=>'required',
+            'email'=>'required|email|unique:users',
+            'password'=>'required|min:5|max:12'
+        ]);
+
+        $users = new Users;
         $users->name = $request->name;
         $users->email = $request->email;
         $users->password = $request->password;
 
-        $users->save();
+        $query = $users->save();
 
-        return redirect('/admin/users'); 
+        if($query){
+            return redirect('/admin/users')->with('success', 'Usuário criado com sucesso!'); 
+        }
+        else{
+            return back()->with('fail', 'Não foi possível cadastrar usuário!');
+        }
     }
 
     /**

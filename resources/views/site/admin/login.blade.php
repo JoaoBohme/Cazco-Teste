@@ -19,18 +19,27 @@
       <h3>Entrar</h3>
     </div>
 
-    </br>
 
-    <div class="input-group mb-3">
-      <input type="text" class="form-control" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1">
+    @error('msg')
+    <div class="alert alert-danger"> {{ $message }} </div>
+    @enderror
+
+    </br>
+<form action="/admin/login" method="POST">
+  @csrf
+
+    <div class="form-group">
+      <input type="text" id="email" name="email" class="form-control" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1">
+      @error('email')<div class="text-danger">{{ $message }} </div>@enderror
     </div>
     <div class="input-group mb-3">
-      <input type="password" class="form-control" placeholder="Senha" aria-label="Password"
-        aria-describedby="basic-addon1">
+      <input type="password" id="password" name="password" class="form-control" placeholder="Senha" aria-label="Password">
+
+      @error('password')<div class="text-danger">{{ $message }} </div>@enderror
     </div>
 
     <div style="text-align: center;">
-      <a href="users" type="button" class="btn btn-primary">Entrar</a>
+      <button type="submit" class="btn btn-primary">Entrar</button>
     </div>
 
     <div style="text-align: center; padding-top: 10px;">
