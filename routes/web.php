@@ -48,7 +48,8 @@ Route::namespace('App')->group(function() {
         
         Route::get('/password-recovery', 'Http\Controllers\User\UserController@passwordRecovery');
         
-        Route::get('/create-report/{id}', 'Http\Controllers\User\UserController@indexCreateReports');
+        Route::get('/create-report', 'Http\Controllers\User\UserController@indexCreateReports');
+        Route::post('/create-report/{id}', 'Http\Controllers\User\UserController@storeReports');
         
         Route::get('/edit-report/{id}', 'Http\Controllers\Report\ReportController@show');
 

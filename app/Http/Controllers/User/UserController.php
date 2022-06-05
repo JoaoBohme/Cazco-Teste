@@ -5,9 +5,12 @@ namespace App\Http\Controllers\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Users;
+use App\Models\Report;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -66,9 +69,47 @@ class UserController extends Controller
 
     public function indexCreateReports()
     {
-        return view('site.user.createReport');
+        if(session()->has('LoggedUsers')){
+            $user = Users::where('id', '=', session('LoggedUsers'))->first();
+            $data = [
+                'LoggedUsersInfo'=>$user
+            ];
+        }
+
+        $reports = DB::table('reports')
+                ->where('user_id', '=', $user->id)
+                ->get();
+
+        return view('site.user.createReport',['reports' => $reports], $data);
     }
 
+    public function storeReports(Request $request)
+    {
+        if(session()->has('LoggedUsers')){
+            $user = Users::where('id', '=', session('LoggedUsers'))->first();
+            $data = [
+                'LoggedUsersInfo'=>$user
+            ];
+        }
+
+        $request->validate([
+            'description'=>'required',
+        ]);
+
+        $report = new Report;
+        $report->day = Carbon::now();
+        $report->description = $request->description;
+        $report->user_id = $user->id;
+
+        $query = $report->save();
+
+        if($query){
+            return redirect('/user/reports')->with('success', 'relatório criado com sucesso!'); 
+        }
+        else{
+            return redirect('/user/reports')->with('fail', 'Não foi possível cadastrar relatório!');
+        }
+    }
 
 
     /**

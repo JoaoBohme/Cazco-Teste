@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Report;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Models\Report;
+use App\Models\Users;
 
 class ReportController extends Controller
 {
@@ -15,7 +17,16 @@ class ReportController extends Controller
      */
     public function indexUsers()
     {
-        $reports = Report::all();
+        if(session()->has('LoggedUsers')){
+            $user = Users::where('id', '=', session('LoggedUsers'))->first();
+            $data = [
+                'LoggedUsersInfo'=>$user
+            ];
+        }
+
+        $reports = DB::table('reports')
+                ->where('user_id', '=', $user->id)
+                ->get();
 
         return view('site.user.reports',['reports' => $reports]);
     }

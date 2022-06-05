@@ -133,8 +133,7 @@ class AdminController extends Controller
     }
      
     public function storeUser(Request $request)
-    {
-
+    {   
         $request->validate([
             'name'=>'required',
             'email'=>'required|email|unique:users',
@@ -149,10 +148,10 @@ class AdminController extends Controller
         $query = $users->save();
 
         if($query){
-            return redirect('/admin/users')->with('success', 'Usuário criado com sucesso!'); 
+            return redirect('/admin/users')->withErrors(['success', 'Usuário criado com sucesso!']); 
         }
         else{
-            return back()->with('fail', 'Não foi possível cadastrar usuário!');
+            return back()->withErrors(['fail', 'Não foi possível cadastrar usuário!']);
         }
     }
 

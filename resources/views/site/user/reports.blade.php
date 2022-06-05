@@ -16,7 +16,16 @@
         <div class="row">
             <div class="col-6"><h3>Relatórios</h3></div>
             <div class="col"><a href="create-report" type="button" class="btn btn-primary">Criar relatório</a></div>
-          </div>
+        </div>
+
+        @error('success')
+        <div class="alert alert-success"> {{ $message }} </div>
+        @enderror
+
+        @error('fail')
+        <div class="alert alert-danger"> {{ $message }} </div>
+        @enderror
+
         <table class="table table-striped table-hover" >
           <thead>
             <tr>
