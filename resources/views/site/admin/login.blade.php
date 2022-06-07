@@ -29,7 +29,7 @@
   @csrf
 
     <div class="form-group">
-      <input type="text" id="email" name="email" class="form-control" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1">
+      <input type="text" id="email" name="email" class="form-control" placeholder="Email">
       @error('email')<div class="text-danger">{{ $message }} </div>@enderror
     </div>
     <div class="input-group mb-3">

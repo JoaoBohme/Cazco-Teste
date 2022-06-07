@@ -7,6 +7,23 @@
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
+  @if (session()->has('LoggedUsers'))
+
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav">
+      <li class="nav-item active">
+        <a class="nav-link" href="/user/reports">Lista de relatórios <span class="sr-only"></span></a>
+      </li>
+    </ul>
+  </div>
+
+  <div class="">
+    <a href="/user/logout">Sair</a>
+  </div>
+  @endif
+
+  @if (session()->has('LoggedAdmin'))
+
   <div class="collapse navbar-collapse" id="navbarNav">
     <ul class="navbar-nav">
       <li class="nav-item active">
@@ -14,8 +31,12 @@
       </li>
     </ul>
   </div>
+
+  <div class="">
+    <a href="/admin/logout">Sair</a>
+  </div>
+  @endif
+
 </nav>
-
-
 
 @yield('content')

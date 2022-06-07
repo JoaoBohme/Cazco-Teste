@@ -5,6 +5,7 @@ namespace App\Http\Controllers\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -38,13 +39,11 @@ class UserController extends Controller
         }
     }
 
-    public function logout(Request $request){
-        Auth::logout();
-
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-
-        return redirect('/user/login');
+    public function logout(){
+        if(session()->has('LoggedUsers')){
+            session()->pull('LoggedUsers');
+            return redirect('/user/login');
+        }
     }
 
     public function forgotPassword()
@@ -92,23 +91,59 @@ class UserController extends Controller
             ];
         }
 
-        $request->validate([
-            'description'=>'required',
-        ]);
+        $reported = Report::whereDate('day', Carbon::today()->toDateString())
+        ->exists();
 
-        $report = new Report;
-        $report->day = Carbon::now();
-        $report->description = $request->description;
-        $report->user_id = $user->id;
+        //dd($reported);
 
-        $query = $report->save();
+        if(!$reported){
+            
+            $request->validate([
+                'description'=>'required',
+            ]);
+    
+            $report = new Report;
+            $report->day = Carbon::now();
+            $report->description = $request->description;   
+            $report->user_id = $user->id;
+    
+            $query = $report->save();
+    
+            if($query){
+                return redirect('/user/reports')->withErrors(['success', 'relatório criado com sucesso!']); 
+            }
+            else{
+                return redirect('/user/reports')->withErrors(['fail', 'Não foi possível cadastrar relatório!']);
+            }
 
-        if($query){
-            return redirect('/user/reports')->with('success', 'relatório criado com sucesso!'); 
         }
         else{
-            return redirect('/user/reports')->with('fail', 'Não foi possível cadastrar relatório!');
+
+            return redirect('/user/reports')->withErrors(['fail'=>"Só é possível cadastrar 1 relatório por dia!"]);
+            
         }
+    }
+
+    function forgotPasswordSendEmail(Request $request){
+
+        $request->validate([
+            'email'=>'required|email'
+        ]);
+
+        try{
+            Mail::to($request->email)
+            ->subject('- Alterar senha')
+            ->send('site.user.passwordRecovery', ['email'=>'bla bla']);
+                
+            return redirect('/user/login')->withErrors(['success'=>'Sucesso! Verifique seu email.']);
+        }
+        catch(\Exception $e){
+            return redirect('/user/login')->withErrors(['error'=>'Erro ao enviar email, contate o administrador!']);
+
+        }
+        
+
+
     }
 
 

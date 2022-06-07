@@ -17,6 +17,15 @@
         <div class="col-6"><h3>Usuários</h3></div>
         <div class="col"><a href="create" type="button" class="btn btn-primary">Criar Usuário</a></div>
       </div>
+
+      @error('success')
+      <div class="alert alert-success"> {{ $message }} </div>
+      @enderror
+
+      @error('fail')
+      <div class="alert alert-danger"> {{ $message }} </div>
+      @enderror
+
         <table class="table table-striped table-hover">
           <thead>
             <tr>

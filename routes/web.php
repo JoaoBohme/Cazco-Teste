@@ -23,6 +23,7 @@ Route::namespace('App')->group(function() {
         Route::post('/login', 'Http\Controllers\Admin\AdminController@authenticate');
         
         Route::get('/forgot-password', 'Http\Controllers\Admin\AdminController@forgotPassword');
+        Route::post('/forgot-password', 'Http\Controllers\Admin\AdminController@forgotPasswordSendEmail');
         
         Route::get('/password-recovery', 'Http\Controllers\Admin\AdminController@passwordRecovery');
         
@@ -37,6 +38,8 @@ Route::namespace('App')->group(function() {
         Route::put('/edit/{id}', 'Http\Controllers\Admin\AdminController@updateUser');
         
         Route::get('/reports/{id}', 'Http\Controllers\Admin\AdminController@indexReports');
+
+        Route::get('/logout', 'Http\Controllers\Admin\AdminController@logout');
     });
 
     Route::prefix('user')->group(function () {
@@ -45,6 +48,7 @@ Route::namespace('App')->group(function() {
         Route::post('/login', 'Http\Controllers\User\UserController@authenticate');
         
         Route::get('/forgot-password', 'Http\Controllers\User\UserController@forgotPassword');
+        Route::post('/forgot-password', 'Http\Controllers\User\UserController@forgotPasswordSendEmail');
         
         Route::get('/password-recovery', 'Http\Controllers\User\UserController@passwordRecovery');
         
@@ -52,8 +56,11 @@ Route::namespace('App')->group(function() {
         Route::post('/create-report/{id}', 'Http\Controllers\User\UserController@storeReports');
         
         Route::get('/edit-report/{id}', 'Http\Controllers\Report\ReportController@show');
+        Route::put('/edit-report/{id}', 'Http\Controllers\Report\ReportController@update');
 
         Route::get('/reports', 'Http\Controllers\User\UserController@indexReports');
         Route::get('/reports', 'Http\Controllers\Report\ReportController@indexUsers');
+
+        Route::get('/logout', 'Http\Controllers\User\UserController@logout');
     });
 });

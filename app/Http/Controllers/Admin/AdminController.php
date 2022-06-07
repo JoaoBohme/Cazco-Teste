@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -217,5 +218,23 @@ class AdminController extends Controller
         Users::findOrFail($id)->delete();
 
         return redirect('/admin/users')->with('msg', 'Usuário excluído com sucesso!');
+    }
+
+    function forgotPasswordSendEmail(Request $request){
+
+        $request->validate([
+            'email'=>'required|email'
+        ]);
+
+        try{
+            Mail::to($request->email)
+            ->send();
+                
+            return redirect('/admin/login')->withErrors(['success'=>'Sucesso! Verifique seu email.']);
+        }
+        catch(\Exception $e){
+            return redirect('/admin/login')->withErrors(['error'=>'Erro ao enviar email, contate o administrador!']);
+            
+        }
     }
 }

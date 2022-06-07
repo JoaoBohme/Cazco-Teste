@@ -19,7 +19,11 @@
       <h3>Entrar</h3>
     </div>
 
-    @error('msg')
+    @error('success')
+    <div class="alert alert-success"> {{ $message }} </div>
+    @enderror
+
+    @error('error')
     <div class="alert alert-danger"> {{ $message }} </div>
     @enderror
         

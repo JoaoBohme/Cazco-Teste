@@ -89,7 +89,15 @@ class ReportController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'description'=>'required'
+        ]);
+
+            Report::findOrFail($request->id)
+                ->update($request->all());
+    
+            return redirect('/user/reports')->withErrors(['success'=> 'Usuário editado com sucesso!']);    
+        
     }
 
     /**
