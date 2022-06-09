@@ -15,19 +15,33 @@
     <div class="card">
       <div class="card-body">
         <h3>Editar {{$users->name}}</h3>
-        <form action="/admin/edit/{{$users->id}}" method="POST">
+
+        @error('success')
+        <div class="alert alert-success"> {{ $message }} </div>
+        @enderror
+    
+        @error('fail')
+        <div class="alert alert-danger"> {{ $message }} </div>
+        @enderror
+
+        <?php
+        $id = Crypt::encrypt($users->id);
+        ?>
+        
+        <form action="/admin/edit/{{$id}}" method="POST">
           @csrf
           @method('PUT')
-        <div class="input-group mb-3">
-          <input id="name" name="name" type="text" class="form-control" value="{{$users->name}}" placeholder="Nome" aria-label="Username" aria-describedby="basic-addon1">
-      </div>
-        <div class="input-group mb-3">
-            <input id="email" name="email" type="text" class="form-control" value="{{$users->email}}" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1">
+        <div class="mb-3">
+          <input id="name" name="name" type="text" class="form-control" value="{{$users->name}}" placeholder="Nome">
+          @error('name')<span class="text-danger">{{ $message }}</span>@enderror
+        </div>
+        <div class="mb-3">
+            <input id="email" name="email" type="text" class="form-control" value="{{$users->email}}" placeholder="Email">
+            @error('email')<span class="text-danger">{{ $message }}</span>@enderror
         </div>
         <button type="submit" class="btn btn-primary">Salvar</button>
       </div>
     </div>
-
   </body>
 </html>
 

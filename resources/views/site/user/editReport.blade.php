@@ -14,14 +14,23 @@
   <body>
     <div class="card">
       <div class="card-body">
+
         <h3>Editar relatório {{$report->id}}</h3>
+
+        @error('success')
+        <div class="alert alert-success"> {{ $message }} </div>
+        @enderror
+    
+        @error('fail')
+        <div class="alert alert-danger"> {{ $message }} </div>
+        @enderror
+
         <form action="/user/edit-report/{{$report->id}}" method="post">
         @csrf
         @method('PUT')
-        @error('description')<div class="text-danger">{{ $message }} </div>@enderror
-        <div class="input-group mb-3">
+        <div class="mb-3">
           <textarea id="description" name="description" rows="3" class="form-control" placeholder="Faça sua descrição aqui.">{{$report->description}}</textarea>
-          
+          @error('description')<div class="text-danger">{{$message}}</div>@enderror
       </div>
       <button type="submit" class="btn btn-primary">Enviar</button>
     </form>

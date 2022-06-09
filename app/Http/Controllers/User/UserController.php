@@ -4,6 +4,7 @@ namespace App\Http\Controllers\User;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
@@ -19,31 +20,37 @@ class UserController extends Controller
     {
         $request->validate([
             'email'=>'required|email',
-            'password'=>'required|min:5|max:12'
+            'password'=>'required'
         ]);
 
         $users = Users::where('email','=', $request->email)->first();
         if($users){
-            if(($request->password == $users->password)){
+            if(Hash::check($request->password, $users->password)){
 
                 $request->session()->put('LoggedUsers', $users->id);
 
                 return redirect('/user/reports');
             }
             else{
-                return back()->withErrors(['msg'=>"Senha inválida!"]);
+                return back()->withErrors(['fail'=>"Senha inválida!"]);
             }
         }
         else{
-            return back()->withErrors(['msg'=>"Email não cadastrado!"]);
+            return back()->withErrors(['fail'=>"Email não cadastrado!"]);
         }
     }
 
     public function logout(){
+
+        try{
         if(session()->has('LoggedUsers')){
             session()->pull('LoggedUsers');
             return redirect('/user/login');
         }
+    }
+    catch(\Exception $e){
+        return back()->withErrors(['fail'=>"Não foi possível fazer logout, tente novamente!"]);
+    }
     }
 
     public function forgotPassword()
@@ -56,9 +63,9 @@ class UserController extends Controller
         return view('site.user.login');
     }
 
-    public function passwordRecovery()
+    public function passwordRecovery($email)
     {
-        return view('site.user.passwordRecovery');
+        return view('site.user.passwordRecovery',['email' => $email]);
     }
     
     public function indexReports()
@@ -92,9 +99,8 @@ class UserController extends Controller
         }
 
         $reported = Report::whereDate('day', Carbon::today()->toDateString())
+        ->where('user_id', $user->id)
         ->exists();
-
-        //dd($reported);
 
         if(!$reported){
             
@@ -131,85 +137,51 @@ class UserController extends Controller
         ]);
 
         try{
-            Mail::to($request->email)
-            ->subject('- Alterar senha')
-            ->send('site.user.passwordRecovery', ['email'=>'bla bla']);
+
+            $users = Users::where('email', $request->email)
+                ->exists();
+
+            if(!$users){
+                return back()->withErrors(['fail'=>'Email não cadastrado!']);
+            }
+
+        $request->email = Crypt::encrypt($request->email);  
+
+            Mail::send('site.user.email', ['request' => $request], function($m)use($request){
+                $m->from('joao.bohmecastro@gmail.com');
+                $m->subject('Recuperar senha');
+                $m->to(Crypt::decrypt($request->email));
+            });
                 
             return redirect('/user/login')->withErrors(['success'=>'Sucesso! Verifique seu email.']);
         }
         catch(\Exception $e){
-            return redirect('/user/login')->withErrors(['error'=>'Erro ao enviar email, contate o administrador!']);
+            return redirect('/user/login')->withErrors(['fail'=>'Erro ao enviar email, contate o administrador!']);
 
         }
-        
-
-
     }
 
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function updatePasswordRecovery(Request $request, $email)
     {
-        //
-    }
+        $request->validate([
+            'password'=>'required|confirmed'
+        ]); 
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        try{
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+            $email = Crypt::decrypt($email);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+            $users = Users::where('email', $email)
+                ->first();  
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
+            Users::findOrFail($users->id)
+                ->update(['password' => bcrypt($request->password)]);
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+            return redirect('/user/login')->withErrors(['success'=> 'Senha alterada com sucesso!']);
+        }
+        catch(\Exception $e){
+
+            return back()->withErrors(['fail'=> 'Não foi possível alterar a senha, tente novamente!']);
+        }
     }
 }

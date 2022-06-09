@@ -9,14 +9,29 @@
   <body>
     <div class="card">
       <div class="card-body">
+
         <h3>Recuperar senha</h3>
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Senha" aria-label="Password" aria-describedby="basic-addon1">
-      </div>
-      <div class="input-group mb-3">
-          <input type="password" class="form-control" placeholder="Confirmação da senha" aria-label="Password" aria-describedby="basic-addon1">
-      </div>
-      <button type="button" class="btn btn-primary">Enviar</button>
+
+        @error('success')
+        <div class="alert alert-success"> {{ $message }} </div>
+        @enderror
+    
+        @error('fail')
+        <div class="alert alert-danger"> {{ $message }} </div>
+        @enderror
+
+        <form action="/user/password-recovery/{{$email}}" method="post">
+          @csrf
+          @method('PUT')
+          <div class="mb-3"> 
+            <input id="password" name="password" type="password" class="form-control" placeholder="Senha">
+            @error('password')<div class="text-danger">{{$message}}</div>@enderror
+          </div>
+          <div class="mb-3">
+            <input id="password_confirmation" name="password_confirmation" type="password" class="form-control" placeholder="Confirmação da senha">
+          </div>
+      <button type="submit" class="btn btn-primary">Enviar</button>
+      </form>
       </div>
     </div>
   </body>

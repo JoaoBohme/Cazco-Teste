@@ -13,13 +13,21 @@
   <div class="card">
     <div class="card-body">
       <h3>Insira seu email</h3>
+
+      @error('success')
+      <div class="alert alert-success"> {{ $message }} </div>
+      @enderror
+  
+      @error('fail')
+      <div class="alert alert-danger"> {{ $message }} </div>
+      @enderror
+
       <form action="/user/forgot-password" method="post">
         @csrf
-      <div class="input-group mb-3">
-        <input id="email" name="email" type="text" class="form-control" placeholder="Email" aria-label="Username"
-          aria-describedby="basic-addon1">
+      <div class="mb-3">
+        <input id="email" name="email" type="text" class="form-control" placeholder="Email">
+        @error('email')<div class="text-danger">{{ $message }} </div>@enderror
       </div>
-      @error('email')<div class="text-danger">{{ $message }} </div>@enderror
       <button type="submit" class="btn btn-primary">Enviar</button>
     </form>
     </div>

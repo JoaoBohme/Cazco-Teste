@@ -16,6 +16,15 @@
     <div class="card">
       <div class="card-body">
         <div class="col"><h3>Relatórios</h3></div>
+
+        @error('success')
+        <div class="alert alert-success"> {{ $message }} </div>
+        @enderror
+    
+        @error('fail')
+        <div class="alert alert-danger"> {{ $message }} </div>
+        @enderror
+
         <table class="table table-striped table-hover" >
           <thead>
             <tr>

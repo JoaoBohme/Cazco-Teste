@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -14,56 +15,40 @@ use App\Models\Report;
 
 class AdminController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
     public function authenticate(Request $request)
     {
         $request->validate([
             'email'=>'required|email',
-            'password'=>'required|min:5|max:12'
+            'password'=>'required'
         ]);
 
         $admin = Admin::where('email','=', $request->email)->first();
         if($admin){
-            if(($request->password == $admin->password)){
+            if(Hash::check($request->password, $admin->password)){
 
                 $request->session()->put('LoggedAdmin', $admin->id);
 
                 return redirect('/admin/users');
             }
             else{
-                return back()->withErrors(['msg'=>"Senha inválida!"]);
+                return back()->withErrors(['fail'=>"Senha inválida!"]);
             }
         }
         else{
-            return back()->withErrors(['msg'=>"Email não cadastrado!"]);
+            return back()->withErrors(['fail'=>"Email não cadastrado!"]);
         }
-    }
-
-    function profile(){
-        if(session()->has('LoggedAdmin')){
-            $admin = Admin::where('id', '=', session('LoggedAdmin'))->first();
-            $data = [
-                'LoggedUserInfo'=>$admin
-            ];
-        }
-        return view("site.admin.users", $data);
     }
 
     public function logout(){
-        if(session()->has('LoggedAdmin')){
-            session()->pull('LoggedAdmin');
-            return redirect('/admin/login');
+        try{
+            if(session()->has('LoggedAdmin')){
+                session()->pull('LoggedAdmin');
+                return redirect('/admin/login');
+            }
         }
-    }
-
-    public function index()
-    {
-        //
+        catch(\Exception $e){
+            return back()->withErrors(['fail'=>"Não foi possível fazer logout, tente novamente!"]);
+        }
     }
 
     public function login()
@@ -76,9 +61,9 @@ class AdminController extends Controller
         return view('site.admin.forgotPassword');
     }
 
-    public function passwordRecovery()
+    public function passwordRecovery($email)
     {
-        return view('site.admin.passwordRecovery');
+        return view('site.admin.passwordRecovery',['email' => $email]);
     }
 
     public function users()
@@ -91,15 +76,23 @@ class AdminController extends Controller
         }
 
         $users = Users::all();
-
+        
         return view('site.admin.users',['users' => $users], $data);
     }
 
     public function editUser($id)
     {
-        $users = Users::findOrFail($id);
+        try{
 
-        return view("site.admin.edit", ['users' => $users]);
+            $id = Crypt::decrypt($id);
+
+            $users = Users::findOrFail($id);
+        
+            return view("site.admin.edit", ['users' => $users]);
+        }
+        catch(\Exception $e){
+            return redirect('/admin/users')->withErrors(['fail'=>'Falha ao tentar editar, tente novamente.']);
+        }
     }
 
     public function createUser()
@@ -109,28 +102,14 @@ class AdminController extends Controller
 
     public function indexReports($id)
     {
+        $id = Crypt::decrypt($id);
+
         $reports = DB::table('reports')
-                ->where('user_id', '=', $id)
-                ->get();
+            ->where('user_id', '=', $id)
+            ->get();
         
         return view("site.admin.reports", ['reports' => $reports]);
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
     }
      
     public function storeUser(Request $request)
@@ -138,13 +117,13 @@ class AdminController extends Controller
         $request->validate([
             'name'=>'required',
             'email'=>'required|email|unique:users',
-            'password'=>'required|min:5|max:12'
+            'password'=>'required|confirmed'
         ]);
 
         $users = new Users;
         $users->name = $request->name;
         $users->email = $request->email;
-        $users->password = $request->password;
+        $users->password = bcrypt($request->password);
 
         $query = $users->save();
 
@@ -156,68 +135,62 @@ class AdminController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
+    public function updatePasswordRecovery(Request $request, $email)
     {
-        //
-    }
+        $request->validate([
+            'password'=>'required|confirmed'
+        ]);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+        try{
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
+            $email = Crypt::decrypt($email);
+            
+            $admin = Admin::where('email', $email)
+                ->first();
+
+            Admin::findOrFail($admin->id)
+                ->update(['password' => bcrypt($request->password)]);
+
+            return redirect('/admin/login')->withErrors(['success'=> 'Senha alterada com sucesso!']);
+        }
+        catch(\Exception $e){
+
+            return back()->withErrors(['fail'=> 'Não foi possível alterar a senha, tente novamente!']);
+        }
     }
 
     public function updateUser(Request $request, $id)
     {
-        Users::findOrFail($request->id)
+        try{
+
+            $id = Crypt::decrypt($id);
+
+            Users::findOrFail($id)
             ->update($request->all());
 
-        return redirect('/admin/users')->with('msg', 'Usuário editado com sucesso!');    
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+            return redirect('/admin/users')->withErrors(['success'=> 'Usuário editado com sucesso!']);
+        }
+        catch(\Exception $e){
+            return redirect('/admin/users')->withErrors(['fail'=> 'Não foi possível editar usuário, tente novamente!']);
+        }
     }
 
     public function destroyUser($id)
     {
-        $reports = DB::table('reports')
-                ->where('user_id', '=', $id)
-                ->delete();
+        try{
+            $reports = DB::table('reports')
+            ->where('user_id', '=', $id)
+            ->delete();
 
-        Users::findOrFail($id)->delete();
+            Users::findOrFail($id)->delete();
 
-        return redirect('/admin/users')->with('msg', 'Usuário excluído com sucesso!');
+            return redirect('/admin/users')->withErrors(['success'=>'Usuário excluído com sucesso!']);
+        }
+        catch(\Exception $e)
+        {
+            return redirect('/admin/users')->withErrors(['fail'=>'Não foi possível excluir usuário!']);   
+        }
+
     }
 
     function forgotPasswordSendEmail(Request $request){
@@ -227,13 +200,26 @@ class AdminController extends Controller
         ]);
 
         try{
-            Mail::to($request->email)
-            ->send();
+
+            $admin = Admin::where('email', $request->email)
+                ->exists();
+                if(!$admin){
+                    return back()->withErrors(['fail'=>'Email não cadastrado!']);
+                }
+
+
+        $request->email = Crypt::encrypt($request->email);
+
+            Mail::send('site.admin.email', ['request' => $request], function($m)use($request){
+                $m->from('joao.bohmecastro@gmail.com');
+                $m->subject('Recuperar senha');
+                $m->to(Crypt::decrypt($request->email) );
+            });
                 
             return redirect('/admin/login')->withErrors(['success'=>'Sucesso! Verifique seu email.']);
         }
         catch(\Exception $e){
-            return redirect('/admin/login')->withErrors(['error'=>'Erro ao enviar email, contate o administrador!']);
+            return redirect('/admin/login')->withErrors(['fail'=>'Erro ao enviar email, contate o administrador!']);
             
         }
     }

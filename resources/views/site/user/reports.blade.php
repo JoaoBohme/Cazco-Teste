@@ -21,7 +21,7 @@
         @error('success')
         <div class="alert alert-success"> {{ $message }} </div>
         @enderror
-
+    
         @error('fail')
         <div class="alert alert-danger"> {{ $message }} </div>
         @enderror
@@ -43,8 +43,11 @@
                 <td>{{$report->day}}</td>
                 <td>{{$report->user_id}}</td>
                 <td>{{$report->description}}</td>
+                <?php
+                $id = Crypt::encrypt($report->id);
+                ?>
                 <td>
-                  <a href="edit-report/{{$report->id}}" type="button" class="btn btn-warning">Editar</a>
+                  <a href="edit-report/{{$id}}" type="button" class="btn btn-warning">Editar</a>
                 </td>
               @endforeach
             </tr>

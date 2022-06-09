@@ -19,8 +19,11 @@
       <h3>Entrar</h3>
     </div>
 
+    @error('success')
+    <div class="alert alert-success"> {{ $message }} </div>
+    @enderror
 
-    @error('msg')
+    @error('fail')
     <div class="alert alert-danger"> {{ $message }} </div>
     @enderror
 
@@ -28,16 +31,15 @@
 <form action="/admin/login" method="POST">
   @csrf
 
-    <div class="form-group">
+    <div class="mb-3">
       <input type="text" id="email" name="email" class="form-control" placeholder="Email">
-      @error('email')<div class="text-danger">{{ $message }} </div>@enderror
+      @error('email')<div class="text-danger">{{$message}}</div>@enderror
     </div>
-    <div class="input-group mb-3">
-      <input type="password" id="password" name="password" class="form-control" placeholder="Senha" aria-label="Password">
-
-      @error('password')<div class="text-danger">{{ $message }} </div>@enderror
+    <div class="mb-3">
+      <input type="password" id="password" name="password" class="form-control" placeholder="Senha">
+      @error('password')<div class="text-danger">{{$message}}</div>@enderror
     </div>
-
+    
     <div style="text-align: center;">
       <button type="submit" class="btn btn-primary">Entrar</button>
     </div>

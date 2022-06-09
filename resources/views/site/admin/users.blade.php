@@ -41,10 +41,12 @@
               <th>{{$users->id}}</th>
               <th>{{$users->name}}</th>
               <th>{{$users->email}}</th>
+              <?php
+                $id = Crypt::encrypt($users->id);
+              ?>
               <td>
-                <a href="reports/{{$users->id}}" type="button" class="btn btn-success">Relatórios</a>
-
-                <a href="edit/{{$users->id}}" type="button" class="btn btn-warning">Editar</a>
+                <a href="reports/{{$id}}" type="button" class="btn btn-success">Relatórios</a>
+                <a href="edit/{{$id}}" type="button" class="btn btn-warning">Editar</a>
               </td>
               <td>
                 <form action="/admin/users/{{$users->id}}" method="POST">

@@ -23,22 +23,20 @@
     <div class="alert alert-success"> {{ $message }} </div>
     @enderror
 
-    @error('error')
+    @error('fail')
     <div class="alert alert-danger"> {{ $message }} </div>
     @enderror
-        
     
     </br>
 
     <form action="/user/login" method="POST">
       @csrf
-      <div class="form-group">
-        <input type="text" id="email" name="email" class="form-control" placeholder="Email" aria-label="Username" aria-describedby="basic-addon1">
+      <div class="mb-3">
+        <input type="text" id="email" name="email" class="form-control" placeholder="Email">
         @error('email')<div class="text-danger">{{ $message }} </div>@enderror
       </div>
-      <div class="input-group mb-3">
-        <input type="password" id="password" name="password" class="form-control" placeholder="Senha" aria-label="Password">
-  
+      <div class="mb-3">
+        <input type="password" id="password" name="password" class="form-control" placeholder="Senha">
         @error('password')<div class="text-danger">{{ $message }} </div>@enderror
       </div>
   

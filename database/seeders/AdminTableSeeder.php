@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Admin;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
 
 class AdminTableSeeder extends Seeder
 {
@@ -17,7 +18,7 @@ class AdminTableSeeder extends Seeder
         Admin::create([
             'name'  =>  'Admin',
             'email'  =>  'admin@cazco.com',
-            'password'  =>  bcrypt('12345'),
+            'password'  =>  bcrypt('senha')
         ]);
     }
 }

@@ -25,10 +25,10 @@ Route::namespace('App')->group(function() {
         Route::get('/forgot-password', 'Http\Controllers\Admin\AdminController@forgotPassword');
         Route::post('/forgot-password', 'Http\Controllers\Admin\AdminController@forgotPasswordSendEmail');
         
-        Route::get('/password-recovery', 'Http\Controllers\Admin\AdminController@passwordRecovery');
+        Route::get('/password-recovery/{email}', 'Http\Controllers\Admin\AdminController@passwordRecovery');
+        Route::put('/password-recovery/{email}', 'Http\Controllers\Admin\AdminController@updatePasswordRecovery');
         
         Route::get('/users', 'Http\Controllers\Admin\AdminController@users');
-        //Route::get('/users', 'Http\Controllers\Admin\AdminController@profile');
         Route::delete('/users/{id}', 'Http\Controllers\Admin\AdminController@destroyUser');
         
         Route::get('/create', 'Http\Controllers\Admin\AdminController@createUser');
@@ -50,7 +50,8 @@ Route::namespace('App')->group(function() {
         Route::get('/forgot-password', 'Http\Controllers\User\UserController@forgotPassword');
         Route::post('/forgot-password', 'Http\Controllers\User\UserController@forgotPasswordSendEmail');
         
-        Route::get('/password-recovery', 'Http\Controllers\User\UserController@passwordRecovery');
+        Route::get('/password-recovery/{email}', 'Http\Controllers\User\UserController@passwordRecovery');
+        Route::put('/password-recovery/{email}', 'Http\Controllers\User\UserController@updatePasswordRecovery');
         
         Route::get('/create-report', 'Http\Controllers\User\UserController@indexCreateReports');
         Route::post('/create-report/{id}', 'Http\Controllers\User\UserController@storeReports');
