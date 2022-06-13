@@ -98,7 +98,7 @@ class UserController extends Controller
             ];
         }
 
-        $reported = Report::whereDate('day', Carbon::today()->toDateString())
+        $reported = Report::whereDate('day', $request->day)
         ->where('user_id', $user->id)
         ->exists();
 
@@ -106,11 +106,12 @@ class UserController extends Controller
             
             $request->validate([
                 'description'=>'required',
+                'day'=>'required',
             ]);
     
             $report = new Report;
-            $report->day = Carbon::now();
-            $report->description = $request->description;   
+            $report->day = $request->day;
+            $report->description = $request->description;
             $report->user_id = $user->id;
     
             $query = $report->save();
@@ -140,10 +141,9 @@ class UserController extends Controller
 
             $users = Users::where('email', $request->email)
                 ->exists();
-
-            if(!$users){
-                return back()->withErrors(['fail'=>'Email não cadastrado!']);
-            }
+                if(!$users){
+                    return back()->withErrors(['fail'=>'Verifique o email fornecido!']);
+                }
 
         $request->email = Crypt::encrypt($request->email);  
 

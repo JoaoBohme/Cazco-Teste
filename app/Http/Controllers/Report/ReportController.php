@@ -22,6 +22,7 @@ class ReportController extends Controller
 
         $reports = DB::table('reports')
                 ->where('user_id', '=', $user->id)
+                ->orderBy('day','desc')
                 ->get();
 
         return view('site.user.reports',['reports' => $reports]);

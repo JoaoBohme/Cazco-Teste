@@ -1,1 +1,1 @@
-Altere sua senha clicando <a href="http://127.0.0.1:8000/user/password-recovery/{{$request->email}}">aqui</a>.
+Olá, este é um email de recuperação de senha. Altere sua senha clicando <a href="http://127.0.0.1:8000/user/password-recovery/{{$request->email}}">aqui</a>. Caso não seja você, apenas ignore.

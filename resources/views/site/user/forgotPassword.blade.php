@@ -10,7 +10,7 @@
 </head>
 
 <body>
-  <div class="card">
+  <div class="card mx-2 my-2">
     <div class="card-body">
       <h3>Insira seu email</h3>
 

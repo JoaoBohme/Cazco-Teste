@@ -1,4 +1,4 @@
-@extends('layouts.site')
+@extends('layouts.admin')
 
 @section('content')
 
@@ -19,13 +19,15 @@
       </div>
 
       @error('success')
+      <hr>
       <div class="alert alert-success"> {{ $message }} </div>
       @enderror
 
       @error('fail')
+      <hr>
       <div class="alert alert-danger"> {{ $message }} </div>
       @enderror
-
+<hr>
         <table class="table table-striped table-hover">
           <thead>
             <tr>

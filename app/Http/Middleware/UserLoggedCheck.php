@@ -19,9 +19,7 @@ class UserLoggedCheck
         if(session()->has('LoggedUsers')){
             return redirect('/user/reports');
         }
-        else if(session()->has('LoggedAdmin')){
-            return redirect('/admin/users');
-        }
+        
         return $next($request);
     }
 }

@@ -31,11 +31,11 @@ class AdminController extends Controller
                 return redirect('/admin/users');
             }
             else{
-                return back()->withErrors(['fail'=>"Senha inválida!"]);
+                return back()->withErrors(['fail'=>"Senha inválida, ou email não cadastrado!"]);
             }
         }
         else{
-            return back()->withErrors(['fail'=>"Email não cadastrado!"]);
+            return back()->withErrors(['fail'=>"Senha inválida, ou email não cadastrado!"]);
         }
     }
 
@@ -204,7 +204,7 @@ class AdminController extends Controller
             $admin = Admin::where('email', $request->email)
                 ->exists();
                 if(!$admin){
-                    return back()->withErrors(['fail'=>'Email não cadastrado!']);
+                    return back()->withErrors(['fail'=>'Verifique o email fornecido!']);
                 }
 
 

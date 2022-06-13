@@ -1,4 +1,4 @@
-@extends('layouts.site')
+@extends('layouts.user')
 
 @section('title', $report->name)
 
